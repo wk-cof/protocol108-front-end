@@ -15,6 +15,7 @@
   "dependencies": {
     "bootstrap": "4.0.0-beta.2",
     "bootstrap-vue": "^1.0.2",
+    "easytimer": "1.1.1",
     "protocol108": "https://github.com/vgorin/protocol108.git",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
