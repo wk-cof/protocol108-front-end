@@ -55,10 +55,10 @@ export default {
         }
     },
     created: function() {
-        this.countdown();
+        // this.countdown();
         // this.validate(0);
         // this.execute(0);
-        this.getBalance();
+        // this.getBalance();
     }
 };
 </script>
