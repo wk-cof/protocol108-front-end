@@ -1,13 +1,19 @@
 <template>
     <div>
         <h3>Protocol 108</h3>
-        <b-alert
-                variant="danger"
-                dismissible
-                :show="!isSequenceValid"
-                @dismissed="isSequenceValid=true">
+        <b-alert    variant="danger"
+                    dismissible
+                    :show="!isSequenceValid"
+                    @dismissed="isSequenceValid=true">
         Invalid Sequence
         </b-alert>
+        <b-alert    variant="success"
+                    dismissible
+                    :show="isExecutionSuccessful"
+                    @dismissed="isExecutionSuccessful=false">
+        Execution Successful
+        </b-alert>
+
         <div>{{time}}</div>
         <b-form inline>
             <label class="sr-only" for="sequenceInput">Sequence</label>
@@ -34,6 +40,7 @@ export default {
             sequenceInput: '',
             sendAmount: 1,
             isSequenceValid: true,
+            isExecutionSuccessful: false,
             errorMessage: '',
             time: 'Loading timer'
         };
@@ -42,12 +49,9 @@ export default {
         countdown() {
             ProtocolProvider.countdown()
                 .then(result => {
-                    // console.log(result);
-                    // this.countdown = result;
                     timer.start({countdown: true, startValues: {seconds: result}});
                     timer.addEventListener('secondsUpdated', (e) => {
-                        // $('#basicUsage').html(timer.getTimeValues().toString());
-                        this.updateTimer(timer.getTimeValues().toString());
+                        this.time = timer.getTimeValues().toString();
                     });
                 })
                 .catch(err => {
@@ -55,9 +59,10 @@ export default {
                 });
         },
         execute() {
-            let numberSequence;
+            let numberSequence, weiAmount;
             try {
                 numberSequence = parseInt(this.sequenceInput) || 0;
+                weiAmount = parseInt(this.sendAmount) || 1;
             } catch (err) {
                 this.isSequenceValid = false;
                 this.errorMessage = 'Input is not an integer';
@@ -68,7 +73,10 @@ export default {
                 .then(_isValid => {
                     this.isSequenceValid = _isValid;
                     if (_isValid) {
-                        return ProtocolProvider.initialize(100);
+                        return ProtocolProvider.initialize(weiAmount)
+                            .then(() => {
+                                this.isExecutionSuccessful = true;
+                            });
                     }
                 })
                 .catch(err => {
@@ -85,9 +93,6 @@ export default {
                 .catch(err => {
                     console.error(err);
                 });
-        },
-        updateTimer(newTime) {
-            this.time = newTime;
         }
     },
     created: function() {
