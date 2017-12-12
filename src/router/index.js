@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import LandingPage from '@/components/LandingPage'
-// import SimpleStudy from '@/components/SimpleStudy'
-// import Register from '@/components/Register'
-// import EnrollPatient from '@/components/EnrollPatient'
+import Details from '@/components/Details'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -15,6 +13,11 @@ export default new Router({
       path: '/',
       name: 'LandingPage',
       component: LandingPage
+    },
+    {
+      path: '/details',
+      name: 'Details',
+      component: Details
     },
   ]
 })

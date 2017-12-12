@@ -3,12 +3,17 @@
     <b-navbar toggleable="md" type="dark" variant="dark">
         <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-        <b-navbar-brand href="#/">The Button</b-navbar-brand>
+        <b-navbar-brand href="#/">Protocol108</b-navbar-brand>
 
         <b-collapse is-nav id="nav_collapse">
 
             <b-navbar-nav>
-                <b-nav-item href="https://github.com/vgorin/protocol108" target="_blank">Github</b-nav-item>
+                <b-nav-item href="#/">Home</b-nav-item>
+                <b-nav-item href="#/details">Details</b-nav-item>
+            </b-navbar-nav>
+
+            <b-navbar-nav class="ml-auto">
+                <b-nav-item right href="https://github.com/vgorin/protocol108" target="_blank">Github</b-nav-item>
             </b-navbar-nav>
 
         </b-collapse>
@@ -18,39 +23,9 @@
 </template>
 
 <script>
-// import SimpleStudy from './services/SimpleStudyProvider';
 
 export default {
-    name: 'app',
-    data: function() {
-        return {
-            // accounts: [],
-            // userName: ''
-        };
-    },
-    computed: {
-        // account: function() {
-        //     return this.accounts[0] || 'Undefined';
-        // }
-    },
-    methods: {
-        // fetchAccounts() {
-        //     return SimpleStudy.accountsPromise.then(accs => {
-        //         this.accounts = accs;
-        //     });
-        // },
-        // fetchUserName() {
-        //     return SimpleStudy.userNamePromise.then(userName => {
-        //         this.userName = userName;
-        //     }).catch(e => {
-        //         this.userName = 'Not Registered';
-        //     });
-        // }
-    },
-    created: function() {
-        // this.fetchAccounts();
-        // this.fetchUserName();
-    }
+    name: 'app'
 };
 </script>
 
