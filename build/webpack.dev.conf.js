@@ -14,7 +14,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
-  
+
   // these devServer options should be customized in /config/index.js
   devServer: {
     clientLogLevel: 'warning',
@@ -37,7 +37,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': require('../config/dev.env')
-    }), 
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
@@ -52,26 +52,26 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
 module.exports = new Promise((resolve, reject) => {
   portfinder.basePort = process.env.PORT || config.dev.port
-  portfinder.getPort((err, port) => {
-    if (err) {
-      reject(err)
-    } else {
-      // publish the new Port, necessary for e2e tests
-      process.env.PORT = port
-      // add port to devServer config
-      devWebpackConfig.devServer.port = port
+  // portfinder.getPort((err, port) => {
+  //   if (err) {
+  //     reject(err)
+  //   } else {
+  //     // publish the new Port, necessary for e2e tests
+  //     process.env.PORT = port
+  //     // add port to devServer config
+  //     devWebpackConfig.devServer.port = port
 
-      // Add FriendlyErrorsPlugin
-      devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
-        compilationSuccessInfo: {
-          messages: [`Your application is running here: http://${config.dev.host}:${port}`],
-        },
-        onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
-      }))
+  //     // Add FriendlyErrorsPlugin
+  //     devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
+  //       compilationSuccessInfo: {
+  //         messages: [`Your application is running here: http://${config.dev.host}:${port}`],
+  //       },
+  //       onErrors: config.dev.notifyOnErrors
+  //       ? utils.createNotifierCallback()
+  //       : undefined
+  //     }))
 
-      resolve(devWebpackConfig)
-    }
-  })
+  //     resolve(devWebpackConfig)
+  //   }
+  // })
 })
