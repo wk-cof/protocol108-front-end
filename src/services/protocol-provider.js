@@ -11,6 +11,7 @@ let retVal = {
     getBalance: null,
     executor: null,
     volume: null,
+    validate: null
 };
 
 function pad(num, size) {
@@ -41,7 +42,7 @@ if (typeof web3 !== 'undefined') {
                 }
             });
         });
-    }
+    };
 
     retVal.countdown = function() {
         return new Promise(function(resolve, reject) {
@@ -56,7 +57,7 @@ if (typeof web3 !== 'undefined') {
                 }
             });
         });
-    }
+    };
 
     retVal.initialize = function(value) {
         return new Promise(function(resolve, reject) {
@@ -74,7 +75,7 @@ if (typeof web3 !== 'undefined') {
                 }
             });
         });
-    }
+    };
 
     retVal.cycle = function() {
         return new Promise(function(resolve, reject) {
@@ -90,14 +91,20 @@ if (typeof web3 !== 'undefined') {
                 }
             });
         });
-    }
+    };
 
     retVal.protocolState = function() {
         return retVal.cycle()
             .then(cycleValue => {
-                return cycleValue > 0? countdownValue > 0? "ACTIVE": "TERMINATED" : "INACTIVE"
+                if (cycleValue > 0) {
+                    return retVal.countdown()
+                        .then(countdownValue => {
+                            return countdownValue > 0? "ACTIVE": "TERMINATED"
+                        });
+                }
+                return "INACTIVE";
             });
-    }
+    };
 
     retVal.getBalance = function(value) {
         return new Promise(function(resolve, reject) {
@@ -113,7 +120,7 @@ if (typeof web3 !== 'undefined') {
                 }
             });
         });
-    }
+    };
 
     retVal.countdownFormatted = function() {
         return retVal.countdown()
@@ -126,8 +133,9 @@ if (typeof web3 !== 'undefined') {
 
                 const countdownFormatted = countdownValue > 0? countdownMinutes + ":" + countdownSeconds: "𓋴𓏲𓍒:𓄿𓏱";
                 console.log("countdown formatted: " + countdownFormatted);
+                return countdownFormatted;
             });
-    }
+    };
 
     retVal.executor = function() {
         return new Promise(function(resolve, reject) {
@@ -143,7 +151,7 @@ if (typeof web3 !== 'undefined') {
                 }
             });
         });
-    }
+    };
 
     retVal.volume = function() {
         return new Promise(function(resolve, reject) {
@@ -158,8 +166,23 @@ if (typeof web3 !== 'undefined') {
                     resolve(volumeFormatted);
                 }
             });
-        })
-    }
+        });
+    };
+
+    retVal.validate = function(input) {
+        return new Promise(function(resolve, reject) {
+            protocol108.validate(input, function(error, result) {
+                if(error) {
+                    console.warn("The input is invalid: " + error);
+                    reject(error);
+                }
+                else {
+                    console.log("The input is valid");
+                    resolve(result);
+                }
+            });
+        });
+    };
 }
 else {
     // not a web3 browser

@@ -68,5 +68,24 @@ export default [
         "payable": false,
         "stateMutability": "view",
         "type": "function"
-    }
+    },
+    {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "sequence",
+            "type": "uint256"
+          }
+        ],
+        "name": "validate",
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
 ];

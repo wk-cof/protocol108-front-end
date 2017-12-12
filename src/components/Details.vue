@@ -6,6 +6,7 @@
             <li>Balance: {{protocolStats.balance}}</li>
             <li>Cycle number: {{protocolStats.cycleNumber}}</li>
             <li>Volume: {{protocolStats.volume}}</li>
+            <li>Last executor: {{protocolStats.lastExecutor}}</li>
         </ul>
         <b-button variant="primary" @click="getStatistics">Refresh</b-button>
     </div>
@@ -19,7 +20,7 @@ export default {
         return {
             protocolStats: {
                 balance: '0 ETH',
-                countdownFormatted: null,
+                countdownFormatted: '',
                 cycleNumber: null,
                 protocolState: 'INACTIVE',
                 lastExecutor: '',
