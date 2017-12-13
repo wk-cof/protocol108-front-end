@@ -16,7 +16,9 @@
     "bootstrap": "4.0.0-beta.2",
     "bootstrap-vue": "^1.0.2",
     "easytimer": "1.1.1",
+    "express": "4.16.2",
     "protocol108": "https://github.com/vgorin/protocol108.git",
+    "serve-static": "1.13.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
