@@ -2,6 +2,18 @@
 # yarn lockfile v1
 
 
+"@fortawesome/fontawesome-free-brands@5.0.1":
+  version "5.0.1"
+  resolved "https://npm.fontawesome.com/771B69EB-91C9-4A32-8206-595ABDAE9ED0/@fortawesome/fontawesome-free-brands/-/fontawesome-free-brands-5.0.1.tgz#d1f485bc5311814b7dfb725b7e037a4623674555"
+
+"@fortawesome/fontawesome-free-solid@5.0.1":
+  version "5.0.1"
+  resolved "https://npm.fontawesome.com/771B69EB-91C9-4A32-8206-595ABDAE9ED0/@fortawesome/fontawesome-free-solid/-/fontawesome-free-solid-5.0.1.tgz#1a635b065268ca0b80ee7cc4073f10b7fec0012f"
+
+"@fortawesome/fontawesome@1.0.1":
+  version "1.0.1"
+  resolved "https://npm.fontawesome.com/771B69EB-91C9-4A32-8206-595ABDAE9ED0/@fortawesome/fontawesome/-/fontawesome-1.0.1.tgz#8ac60e1e7b437889baf9c9d6e3a61ef3b637170d"
+
 "@types/strip-bom@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/strip-bom/-/strip-bom-3.0.0.tgz#14a8ec3956c2e81edb7520790aecf21c290aebd2"
@@ -2708,6 +2720,12 @@ flatten@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
 
+flipclock@0.7.8:
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/flipclock/-/flipclock-0.7.8.tgz#f37f1f7ca9044d902c1fee1f1ae7f4bd1eef1a54"
+  dependencies:
+    jquery ">=1.7"
+
 for-in@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -3852,6 +3870,10 @@ jest@^21.2.0:
   resolved "https://registry.yarnpkg.com/jest/-/jest-21.2.1.tgz#c964e0b47383768a1438e3ccf3c3d470327604e1"
   dependencies:
     jest-cli "^21.2.1"
+
+jquery@>=1.7:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
 js-base64@^2.1.9:
   version "2.3.2"
@@ -6660,6 +6682,10 @@ vm-browserify@0.0.4:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
   dependencies:
     indexof "0.0.1"
+
+vue-awesome@2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/vue-awesome/-/vue-awesome-2.3.4.tgz#a8b06a21dd95a5787e108561be89e216fd9a78e6"
 
 vue-functional-data-merge@^1.0.6:
   version "1.0.6"

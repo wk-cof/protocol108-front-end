@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="bg-dark text-success">
         <h3>Protocol 108</h3>
         <b-alert    variant="danger"
                     dismissible
@@ -21,9 +21,8 @@
             <b-input-group left="wei" class="mb-2 mr-sm-2 mb-sm-0">
                 <b-input id="sendAmount" placeholder="1" v-model="sendAmount" />
             </b-input-group>
-            <b-button type="submit" variant="primary" @click="execute">Execute protocol</b-button>
+            <b-button type="submit" variant="success" @click="execute">Execute protocol</b-button>
         </b-form>
-
     </div>
 </template>
 
@@ -49,7 +48,7 @@ export default {
         countdown() {
             ProtocolProvider.countdown()
                 .then(result => {
-                    timer.start({countdown: true, startValues: {seconds: result}});
+                    timer.start({countdown: true, startValues: {seconds: result || 1}});
                     timer.addEventListener('secondsUpdated', (e) => {
                         this.time = timer.getTimeValues().toString();
                     });

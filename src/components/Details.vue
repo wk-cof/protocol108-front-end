@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="text-success bg-dark">
         <ul>
             <li>Protocol state: {{protocolStats.protocolState}}</li>
             <li>Countdown: {{protocolStats.countdownFormatted}}</li>
@@ -8,7 +8,7 @@
             <li>Volume: {{protocolStats.volume}}</li>
             <li>Last executor: {{protocolStats.lastExecutor}}</li>
         </ul>
-        <b-button variant="primary" @click="getStatistics">Refresh</b-button>
+        <b-button variant="success" @click="getStatistics">Refresh</b-button>
     </div>
 </template>
 
