@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-dark text-success">
-        <h3>Protocol 108</h3>
+    <div class="text-success" id="protocol-component">
+        <!-- <h3>Protocol 108</h3> -->
         <b-alert    variant="danger"
                     dismissible
                     :show="!isSequenceValid"
@@ -15,14 +15,11 @@
         </b-alert>
 
         <div>{{time}}</div>
-        <b-form inline>
-            <label class="sr-only" for="sequenceInput">Sequence</label>
-            <b-input id="sequenceInput" placeholder="Sequence" v-model="sequenceInput" />
-            <b-input-group left="wei" class="mb-2 mr-sm-2 mb-sm-0">
-                <b-input id="sendAmount" placeholder="1" v-model="sendAmount" />
-            </b-input-group>
-            <b-button type="submit" variant="success" @click="execute">Execute protocol</b-button>
-        </b-form>
+        <b-input-group left="wei" class="protocol-input">
+            <b-input id="sendAmount" placeholder="1" v-model="sendAmount" />
+        </b-input-group>
+        <b-input id="sequenceInput"  class="protocol-input" placeholder="Sequence" v-model="sequenceInput" />
+        <b-button class="execute-button" type="submit" variant="success" @click="execute">Execute protocol</b-button>
     </div>
 </template>
 
@@ -104,5 +101,22 @@ export default {
 <style scoped>
 #sendAmount {
     width: 70px;
+}
+#protocol-component {
+    display: flex;           /* establish flex container */
+    /* flex: 1; */
+    flex-direction: column;  /* make main axis vertical */
+    justify-content: center; /* center items vertically, in this case */
+    align-items: center;
+    align-items: center;     /* center items horizontally, in this case */
+    height: 100%;
+}
+
+.protocol-input {
+    width: 70%;
+}
+
+.execute-button {
+    margin-top: 100px;
 }
 </style>

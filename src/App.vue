@@ -1,12 +1,6 @@
 <template>
     <div id="app">
-    <b-navbar toggleable="md" type="dark" variant="dark">
-
-        <!-- <b-navbar-toggle target="nav_collapse"></b-navbar-toggle> -->
-
-        <!-- <b-navbar-brand href="#/">Protocol108</b-navbar-brand> -->
-
-        <!-- <b-collapse is-nav id="nav_collapse"> -->
+    <!-- <b-navbar toggleable="md" type="dark" variant="dark">
         <b-navbar-brand href="#">
             <b-img src="static/TheSwan.png" alt="" id="brand-image"/>
         </b-navbar-brand>
@@ -23,7 +17,7 @@
             </b-navbar-nav>
 
         </b-collapse>
-    </b-navbar>
+    </b-navbar> -->
     <router-view/>
     </div>
 </template>
@@ -36,15 +30,8 @@ export default {
 </script>
 
 <style>
-    #app {
-        font-family: "Avenir", Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        color: #2c3e50;
-    }
-
-    #brand-image {
-        width: 45px;
-        height: 45px;
-    }
+#app {
+  width: 100%;
+  height: 100%;
+}
 </style>
