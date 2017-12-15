@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="flip-clock">
-    <h1>flip-clock Component</h1>
     <div class="countdown-wrapper">
       <div id="countdown" class="countdown"></div>
     </div>
@@ -13,10 +12,10 @@
 
   export default  {
     name: 'flip-clock',
-    props: [],
+    props: ['seconds'],
     mounted() {
       this.init_clock();
-      this.set_countdown(100000, new Date());
+      this.set_countdown(new Date());
     },
     created: function() {
 
@@ -27,14 +26,13 @@
       }
     },
     methods: {
-      set_countdown(seconds, start) {
-        // let elapsed, end, left_secs, now, seconds;
+      set_countdown(start) {
         if (this.countdown && this.countdown.running) {
           return;
         }
         let now = new Date;
         start = new Date(start);
-        let end = start.getTime() + seconds * 1000;
+        let end = start.getTime() + this.seconds * 1000;
         let left_secs = Math.round((end - now.getTime()) / 1000);
         let elapsed = false;
         if (left_secs < 0) {

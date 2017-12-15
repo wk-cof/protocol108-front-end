@@ -3,8 +3,8 @@
         <!-- <h3>Protocol 108</h3> -->
         <b-alert    variant="danger"
                     dismissible
-                    :show="!isSequenceValid"
-                    @dismissed="isSequenceValid=true">
+                    :show="toasts.displayError"
+                    @dismissed="toasts.displayError=false">
         Invalid Sequence
         </b-alert>
         <b-alert    variant="success"
@@ -14,7 +14,7 @@
         Execution Successful
         </b-alert>
 
-        <div class="your-clock"></div>
+        <flip-clock v-bind:seconds="timer.coundown" v-if="timer.display"></flip-clock>
         <b-input-group left="wei" class="protocol-input">
             <b-input id="sendAmount" placeholder="1" v-model="sendAmount" />
         </b-input-group>
@@ -25,27 +25,30 @@
 
 <script>
 import ProtocolProvider from '../services/protocol-provider';
+import FlipClock from './FlipClock';
 
 export default {
     data: function() {
         return {
-            coundown: 0,
+            timer: {
+                coundown: 0,
+                display: false
+            },
             sequenceInput: '',
             sendAmount: 1,
-            isSequenceValid: true,
+            toasts: {
+                displayError: false
+            },
             isExecutionSuccessful: false,
-            errorMessage: '',
-            time: 'Loading timer'
+            errorMessage: ''
         };
     },
     methods: {
         countdown() {
             ProtocolProvider.countdown()
                 .then(result => {
-                    // timer.start({countdown: true, startValues: {seconds: result || 1}});
-                    // timer.addEventListener('secondsUpdated', (e) => {
-                    //     this.time = timer.getTimeValues().toString();
-                    // });
+                    this.timer.display = true;
+                    this.timer.coundown = result;
                 })
                 .catch(err => {
                     console.log(err);
@@ -57,14 +60,14 @@ export default {
                 numberSequence = parseInt(this.sequenceInput) || 0;
                 weiAmount = parseInt(this.sendAmount) || 1;
             } catch (err) {
-                this.isSequenceValid = false;
+                this.toasts.displayError = true;
                 this.errorMessage = 'Input is not an integer';
                 return;
             }
 
             ProtocolProvider.validate(numberSequence)
                 .then(_isValid => {
-                    this.isSequenceValid = _isValid;
+                    this.toasts.displayError = !_isValid;
                     if (_isValid) {
                         return ProtocolProvider.initialize(weiAmount)
                             .then(() => {
@@ -75,7 +78,7 @@ export default {
                 .catch(err => {
                     console.error('Execution failed. ' + err);
                     this.errorMessage = err;
-                    this.isSequenceValid = false;
+                    this.toasts.displayError = true;
                 });
         },
         protocolState() {
@@ -90,6 +93,9 @@ export default {
     },
     created: function() {
         this.countdown();
+    },
+    components: {
+        'flip-clock': FlipClock
     }
 };
 </script>
