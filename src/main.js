@@ -5,10 +5,10 @@ import App from './App';
 import router from './router';
 import BootstrapVue from 'bootstrap-vue';
 import 'vue-awesome/icons/github'
-
 import Icon from 'vue-awesome/components/Icon'
 
 Vue.component('icon', Icon)
+
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);

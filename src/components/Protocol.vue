@@ -14,7 +14,7 @@
         Execution Successful
         </b-alert>
 
-        <div>{{time}}</div>
+        <div class="your-clock"></div>
         <b-input-group left="wei" class="protocol-input">
             <b-input id="sendAmount" placeholder="1" v-model="sendAmount" />
         </b-input-group>
@@ -25,9 +25,6 @@
 
 <script>
 import ProtocolProvider from '../services/protocol-provider';
-import Timer from 'easytimer/dist/easytimer.min';
-
-let timer = new Timer();
 
 export default {
     data: function() {
@@ -45,10 +42,10 @@ export default {
         countdown() {
             ProtocolProvider.countdown()
                 .then(result => {
-                    timer.start({countdown: true, startValues: {seconds: result || 1}});
-                    timer.addEventListener('secondsUpdated', (e) => {
-                        this.time = timer.getTimeValues().toString();
-                    });
+                    // timer.start({countdown: true, startValues: {seconds: result || 1}});
+                    // timer.addEventListener('secondsUpdated', (e) => {
+                    //     this.time = timer.getTimeValues().toString();
+                    // });
                 })
                 .catch(err => {
                     console.log(err);
@@ -104,7 +101,6 @@ export default {
 }
 #protocol-component {
     display: flex;           /* establish flex container */
-    /* flex: 1; */
     flex-direction: column;  /* make main axis vertical */
     justify-content: center; /* center items vertically, in this case */
     align-items: center;

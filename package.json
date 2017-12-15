@@ -1,5 +1,5 @@
 {
-  "name": "SmartTrials",
+  "name": "Protocol108",
   "version": "1.0.0",
   "author": "Mikhail Gorbachev <mgorbachev@factset.com>",
   "private": true,
@@ -20,6 +20,7 @@
     "bootstrap-vue": "^1.0.2",
     "easytimer": "1.1.1",
     "flipclock": "0.7.8",
+    "jquery": "3.2.1",
     "protocol108": "https://github.com/vgorin/protocol108.git",
     "vue": "^2.5.2",
     "vue-awesome": "2.3.4",
