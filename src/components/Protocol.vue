@@ -1,58 +1,75 @@
 <template>
-    <div>
-        <h3>Protocol 108</h3>
-        <b-alert    variant="danger"
+    <div class="protocol-vue">
+        <b-alert    class="popup-alert"
+                    variant="danger"
                     dismissible
-                    :show="!isSequenceValid"
-                    @dismissed="isSequenceValid=true">
+                    :show="toasts.displayError"
+                    @dismissed="toasts.displayError=false">
         Invalid Sequence
         </b-alert>
-        <b-alert    variant="success"
+        <b-alert    class="popup-alert"
+                    variant="success"
                     dismissible
                     :show="isExecutionSuccessful"
                     @dismissed="isExecutionSuccessful=false">
         Execution Successful
         </b-alert>
-
-        <div>{{time}}</div>
-        <b-form inline>
-            <label class="sr-only" for="sequenceInput">Sequence</label>
-            <b-input id="sequenceInput" placeholder="Sequence" v-model="sequenceInput" />
-            <b-input-group left="wei" class="mb-2 mr-sm-2 mb-sm-0">
-                <b-input id="sendAmount" placeholder="1" v-model="sendAmount" />
+        <div class="text-success" id="protocol-component">
+            <flip-clock v-bind:seconds="timer.coundown" v-if="timer.display"></flip-clock>
+            <b-input-group left="wei" class="protocol-input" style="max-width: 400px">
+                <b-input id="sendAmount" class="bg-dark text-success border-dark" placeholder="1" v-model="sendAmount" />
             </b-input-group>
-            <b-button type="submit" variant="primary" @click="execute">Execute protocol</b-button>
-        </b-form>
-
+            <br>
+            <b-form-textarea    class="protocol-input bg-dark text-success border-dark"
+                                v-model="sequenceInput.staticMessage"
+                                :no-resize="true"
+                                :rows="2"
+                                disabled
+                                :max-rows="2"
+                                >
+            </b-form-textarea>
+            <b-form-textarea    class="protocol-input bg-dark text-success border-dark active-input"
+                                v-model="sequenceInput.input"
+                                :no-resize="true"
+                                :rows="5"
+                                :max-rows="5"
+                                >
+            </b-form-textarea>
+            <b-button class="execute-button" type="submit" variant="success" @click="execute">Execute protocol</b-button>
+        </div>
     </div>
 </template>
 
 <script>
 import ProtocolProvider from '../services/protocol-provider';
-import Timer from 'easytimer/dist/easytimer.min';
-
-let timer = new Timer();
+import FlipClock from './FlipClock';
 
 export default {
     data: function() {
         return {
-            coundown: 0,
-            sequenceInput: '',
-            sendAmount: 1,
-            isSequenceValid: true,
+            timer: {
+                coundown: 0,
+                display: false
+            },
+            sequenceInput: {
+                state: false,
+                staticMessage: '>: Swan Protocol initiated \n>: Enter Sequence',
+                input: '>: '
+            },
+            sendAmount: null,
+            toasts: {
+                displayError: false
+            },
             isExecutionSuccessful: false,
-            errorMessage: '',
-            time: 'Loading timer'
+            errorMessage: ''
         };
     },
     methods: {
         countdown() {
             ProtocolProvider.countdown()
                 .then(result => {
-                    timer.start({countdown: true, startValues: {seconds: result}});
-                    timer.addEventListener('secondsUpdated', (e) => {
-                        this.time = timer.getTimeValues().toString();
-                    });
+                    this.timer.display = true;
+                    this.timer.coundown = result;
                 })
                 .catch(err => {
                     console.log(err);
@@ -61,28 +78,31 @@ export default {
         execute() {
             let numberSequence, weiAmount;
             try {
-                numberSequence = parseInt(this.sequenceInput) || 0;
+                const parsedInput = this.sanitizeInput(this.sequenceInput.input);
+                numberSequence = parseInt(parsedInput) || 0;
                 weiAmount = parseInt(this.sendAmount) || 1;
             } catch (err) {
-                this.isSequenceValid = false;
+                this.toasts.displayError = true;
                 this.errorMessage = 'Input is not an integer';
                 return;
             }
 
             ProtocolProvider.validate(numberSequence)
                 .then(_isValid => {
-                    this.isSequenceValid = _isValid;
+                    this.toasts.displayError = !_isValid;
                     if (_isValid) {
                         return ProtocolProvider.initialize(weiAmount)
                             .then(() => {
                                 this.isExecutionSuccessful = true;
                             });
+                    } else {
+                        this.sequenceInput.state = 'invalid';
                     }
                 })
                 .catch(err => {
                     console.error('Execution failed. ' + err);
                     this.errorMessage = err;
-                    this.isSequenceValid = false;
+                    this.toasts.displayError = true;
                 });
         },
         protocolState() {
@@ -93,17 +113,54 @@ export default {
                 .catch(err => {
                     console.error(err);
                 });
+        },
+        sanitizeInput(input) {
+            let regex = /^>?:? ?(\d+)/;
+            let results = input.match(regex);
+            return results && results[1] ? results[1] : input;
         }
     },
     created: function() {
         this.countdown();
+    },
+    components: {
+        'flip-clock': FlipClock
     }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
+.protocol-vue {
+    flex: 1;
+    height: 100%;
+}
+.active-input {
+    margin-top: -9px;
+}
+
+.popup-alert {
+    position: absolute;
+    width: 100%;
+}
+
 #sendAmount {
     width: 70px;
+}
+#protocol-component {
+    display: flex;           /* establish flex container */
+    flex-direction: column;  /* make main axis vertical */
+    justify-content: center; /* center items vertically, in this case */
+    align-items: center;
+    align-items: center;     /* center items horizontally, in this case */
+    height: calc(100% - 100px);
+}
+
+.protocol-input {
+    width: 70%;
+}
+
+.execute-button {
+    margin-top: 100px;
 }
 </style>
