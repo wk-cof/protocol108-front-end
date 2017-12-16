@@ -6,6 +6,8 @@ import router from './router';
 import BootstrapVue from 'bootstrap-vue';
 import 'vue-awesome/icons/github'
 import Icon from 'vue-awesome/components/Icon'
+import  "flipclock/compiled/flipclock.css";
+// require('jquery/dist/jquery');
 
 Vue.component('icon', Icon)
 

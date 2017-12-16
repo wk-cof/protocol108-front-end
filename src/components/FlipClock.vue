@@ -9,6 +9,11 @@
 
 <script lang="js">
 /* eslint-disable */
+// @import 'flipclock/compiled/flipclock.min.js';
+import $ from 'jquery';
+
+window.jQuery = $; // ugh flipclock, you suck
+require('flipclock/compiled/flipclock');
 
   export default  {
     name: 'flip-clock',
@@ -43,7 +48,7 @@
         return this.countdown.start();
       },
       init_clock() {
-        this.countdown = new FlipClock($('.countdown'), {
+        this.countdown = $('.countdown').FlipClock({
           clockFace: 'MinuteCounter',
           language: 'en',
           autoStart: false,
