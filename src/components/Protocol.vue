@@ -1,40 +1,42 @@
 <template>
-    <div class="text-success" id="protocol-component">
-        <!-- <h3>Protocol 108</h3> -->
-        <b-alert    variant="danger"
+    <div class="protocol-vue">
+        <b-alert    class="popup-alert"
+                    variant="danger"
                     dismissible
                     :show="toasts.displayError"
                     @dismissed="toasts.displayError=false">
         Invalid Sequence
         </b-alert>
-        <b-alert    variant="success"
+        <b-alert    class="popup-alert"
+                    variant="success"
                     dismissible
                     :show="isExecutionSuccessful"
                     @dismissed="isExecutionSuccessful=false">
         Execution Successful
         </b-alert>
-
-        <flip-clock v-bind:seconds="timer.coundown" v-if="timer.display"></flip-clock>
-        <b-input-group left="wei" class="protocol-input" style="max-width: 400px">
-            <b-input id="sendAmount" class="bg-dark text-success border-dark" placeholder="1" v-model="sendAmount" />
-        </b-input-group>
-        <br>
-        <b-form-textarea    class="protocol-input bg-dark text-success border-dark"
-                            v-model="sequenceInput.staticMessage"
-                            :no-resize="true"
-                            :rows="2"
-                            disabled
-                            :max-rows="2"
-                            >
-        </b-form-textarea>
-        <b-form-textarea    class="protocol-input bg-dark text-success border-dark active-input"
-                            v-model="sequenceInput.input"
-                            :no-resize="true"
-                            :rows="5"
-                            :max-rows="5"
-                            >
-        </b-form-textarea>
-        <b-button class="execute-button" type="submit" variant="success" @click="execute">Execute protocol</b-button>
+        <div class="text-success" id="protocol-component">
+            <flip-clock v-bind:seconds="timer.coundown" v-if="timer.display"></flip-clock>
+            <b-input-group left="wei" class="protocol-input" style="max-width: 400px">
+                <b-input id="sendAmount" class="bg-dark text-success border-dark" placeholder="1" v-model="sendAmount" />
+            </b-input-group>
+            <br>
+            <b-form-textarea    class="protocol-input bg-dark text-success border-dark"
+                                v-model="sequenceInput.staticMessage"
+                                :no-resize="true"
+                                :rows="2"
+                                disabled
+                                :max-rows="2"
+                                >
+            </b-form-textarea>
+            <b-form-textarea    class="protocol-input bg-dark text-success border-dark active-input"
+                                v-model="sequenceInput.input"
+                                :no-resize="true"
+                                :rows="5"
+                                :max-rows="5"
+                                >
+            </b-form-textarea>
+            <b-button class="execute-button" type="submit" variant="success" @click="execute">Execute protocol</b-button>
+        </div>
     </div>
 </template>
 
@@ -129,8 +131,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.protocol-vue {
+    flex: 1;
+    height: 100%;
+}
 .active-input {
     margin-top: -9px;
+}
+
+.popup-alert {
+    position: absolute;
+    width: 100%;
 }
 
 #sendAmount {
@@ -142,7 +153,7 @@ export default {
     justify-content: center; /* center items vertically, in this case */
     align-items: center;
     align-items: center;     /* center items horizontally, in this case */
-    height: 100%;
+    height: calc(100% - 100px);
 }
 
 .protocol-input {
