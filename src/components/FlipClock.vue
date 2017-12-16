@@ -49,21 +49,21 @@
           autoStart: false,
           countdown: true,
           showSeconds: true,
-          callbacks: {
-            start: function() {
-              return console.log('The clock has started!');
-            },
-            stop: function() {
-              return console.log('The clock has stopped!');
-            },
-            interval: function() {
-              var time;
-              time = this.factory.getTime().time;
-              if (time) {
-                return console.log('Clock interval', time);
-              }
-            }
-          }
+          // callbacks: {
+          //   start: function() {
+          //     return console.log('The clock has started!');
+          //   },
+          //   stop: function() {
+          //     return console.log('The clock has stopped!');
+          //   },
+          //   interval: function() {
+          //     var time;
+          //     time = this.factory.getTime().time;
+          //     if (time) {
+          //       return console.log('Clock interval', time);
+          //     }
+          //   }
+          // }
         });
       }
     }

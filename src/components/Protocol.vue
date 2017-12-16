@@ -19,12 +19,19 @@
             <b-input id="sendAmount" class="bg-dark text-success border-dark" placeholder="1" v-model="sendAmount" />
         </b-input-group>
         <br>
-        <b-form-textarea    id="sequenceInput"
-                            class="protocol-input bg-dark text-success border-dark"
+        <b-form-textarea    class="protocol-input bg-dark text-success border-dark"
+                            v-model="sequenceInput.staticMessage"
+                            :no-resize="true"
+                            :rows="2"
+                            disabled
+                            :max-rows="2"
+                            >
+        </b-form-textarea>
+        <b-form-textarea    class="protocol-input bg-dark text-success border-dark active-input"
                             v-model="sequenceInput.input"
                             :no-resize="true"
-                            :rows="6"
-                            :max-rows="6"
+                            :rows="5"
+                            :max-rows="5"
                             >
         </b-form-textarea>
         <b-button class="execute-button" type="submit" variant="success" @click="execute">Execute protocol</b-button>
@@ -44,7 +51,8 @@ export default {
             },
             sequenceInput: {
                 state: false,
-                input: 'Swan Protocol initiated \nEnter Sequence \n >'
+                staticMessage: '>: Swan Protocol initiated \n>: Enter Sequence',
+                input: '>: '
             },
             sendAmount: null,
             toasts: {
@@ -68,7 +76,8 @@ export default {
         execute() {
             let numberSequence, weiAmount;
             try {
-                numberSequence = parseInt(this.sequenceInput.input) || 0;
+                const parsedInput = this.sanitizeInput(this.sequenceInput.input);
+                numberSequence = parseInt(parsedInput) || 0;
                 weiAmount = parseInt(this.sendAmount) || 1;
             } catch (err) {
                 this.toasts.displayError = true;
@@ -102,6 +111,11 @@ export default {
                 .catch(err => {
                     console.error(err);
                 });
+        },
+        sanitizeInput(input) {
+            let regex = /^>?:? ?(\d+)/;
+            let results = input.match(regex);
+            return results && results[1] ? results[1] : input;
         }
     },
     created: function() {
@@ -115,7 +129,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
+.active-input {
+    margin-top: -9px;
+}
 
 #sendAmount {
     width: 70px;
