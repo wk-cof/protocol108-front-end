@@ -23,9 +23,9 @@
             <b-form-textarea    class="protocol-input bg-dark text-success border-dark"
                                 v-model="sequenceInput.staticMessage"
                                 :no-resize="true"
-                                :rows="2"
+                                :rows="7"
                                 disabled
-                                :max-rows="2"
+                                :max-rows="7"
                                 >
             </b-form-textarea>
             <b-form-textarea    class="protocol-input bg-dark text-success border-dark active-input"
@@ -33,6 +33,7 @@
                                 :no-resize="true"
                                 :rows="5"
                                 :max-rows="5"
+                                v-if="sequenceInput.display"
                                 >
             </b-form-textarea>
             <b-button class="execute-button" type="submit" variant="success" @click="execute">Execute protocol</b-button>
@@ -52,9 +53,10 @@ export default {
                 display: false
             },
             sequenceInput: {
-                state: false,
-                staticMessage: '>: Swan Protocol initiated \n>: Enter Sequence',
-                input: '>: '
+                display: false,
+                staticMessage: '',
+                input: '>: ',
+                waiting: null
             },
             sendAmount: null,
             toasts: {
@@ -66,16 +68,20 @@ export default {
     },
     methods: {
         countdown() {
-            ProtocolProvider.countdown()
+            this.startWaiting('Loading SWAN protocol...');
+            return ProtocolProvider.countdown()
                 .then(result => {
+                    this.stopWaiting('Success');
                     this.timer.display = true;
                     this.timer.coundown = result;
                 })
                 .catch(err => {
+                    this.stopWaiting('Failure');
                     console.log(err);
                 });
         },
         execute() {
+            this.startWaiting();
             let numberSequence, weiAmount;
             try {
                 const parsedInput = this.sanitizeInput(this.sequenceInput.input);
@@ -84,6 +90,7 @@ export default {
             } catch (err) {
                 this.toasts.displayError = true;
                 this.errorMessage = 'Input is not an integer';
+                // this.stopWaiting();
                 return;
             }
 
@@ -93,16 +100,19 @@ export default {
                     if (_isValid) {
                         return ProtocolProvider.initialize(weiAmount)
                             .then(() => {
+                                this.stopWaiting();
                                 this.isExecutionSuccessful = true;
                             });
                     } else {
                         this.sequenceInput.state = 'invalid';
+                        this.stopWaiting();
                     }
                 })
                 .catch(err => {
                     console.error('Execution failed. ' + err);
                     this.errorMessage = err;
                     this.toasts.displayError = true;
+                    this.stopWaiting();
                 });
         },
         protocolState() {
@@ -118,10 +128,62 @@ export default {
             let regex = /^>?:? ?(\d+)/;
             let results = input.match(regex);
             return results && results[1] ? results[1] : input;
+        },
+        startWaiting(startMessage) {
+            if (this.sequenceInput.staticMessage.length > 0) {
+                this.sequenceInput.staticMessage += '\n';
+            }
+            this.sequenceInput.staticMessage += '>: ' + startMessage;
+            this.sequenceInput.waiting = setInterval(() => {
+                this.sequenceInput.staticMessage += '.';
+            }, 500);
+        },
+        stopWaiting(stopMessage) {
+            if (this.sequenceInput.waiting) {
+                this.sequenceInput.staticMessage += '  ' + stopMessage;
+                clearInterval(this.sequenceInput.waiting);
+                this.sequenceInput.waiting = null;
+            }
+        },
+        getStatistics() {
+            this.startWaiting('Loading protocol state...');
+            return ProtocolProvider.protocolState()
+                .then(protocolState => {
+                    this.stopWaiting(protocolState);
+                    this.startWaiting('Loading protocol balance...');
+                    return ProtocolProvider.getBalance();
+                })
+                .then(result => {
+                    this.stopWaiting(result);
+                    this.startWaiting('Loading cycle number...');
+                    return ProtocolProvider.cycle();
+                })
+                .then(result => {
+                    this.stopWaiting(result);
+                    this.startWaiting('Loading last executor ID...');
+                    return ProtocolProvider.executor();
+                })
+                .then(result => {
+                    this.stopWaiting(result);
+                    this.startWaiting('Loading volume...');
+                    return ProtocolProvider.volume();
+                })
+                .then(result => {
+                    this.stopWaiting(result);
+                    this.startWaiting('Enter Sequence');
+                    this.stopWaiting('');
+                    this.sequenceInput.display = true;
+                })
+                .catch(failure => {
+                    this.stopWaiting('Error: ' + JSON.stringify(failure));
+                });
         }
     },
     created: function() {
-        this.countdown();
+        this.countdown()
+            .then(() => {
+                this.getStatistics();
+            });
     },
     components: {
         'flip-clock': FlipClock
