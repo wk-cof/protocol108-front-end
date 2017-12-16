@@ -1,11 +1,9 @@
 <template>
     <div id="app">
-    <b-navbar toggleable="md" type="dark" variant="dark">
-        <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-
-        <b-navbar-brand href="#/">Protocol108</b-navbar-brand>
-
-        <b-collapse is-nav id="nav_collapse">
+    <!-- <b-navbar toggleable="md" type="dark" variant="dark">
+        <b-navbar-brand href="#">
+            <b-img src="static/TheSwan.png" alt="" id="brand-image"/>
+        </b-navbar-brand>
 
             <b-navbar-nav>
                 <b-nav-item href="#/">Home</b-nav-item>
@@ -13,11 +11,13 @@
             </b-navbar-nav>
 
             <b-navbar-nav class="ml-auto">
-                <b-nav-item right href="https://github.com/vgorin/protocol108" target="_blank">Github</b-nav-item>
+                <b-nav-item right href="https://github.com/vgorin/protocol108" target="_blank">
+                    <icon name="github" scale="3"></icon>
+                </b-nav-item>
             </b-navbar-nav>
 
         </b-collapse>
-    </b-navbar>
+    </b-navbar> -->
     <router-view/>
     </div>
 </template>
@@ -30,10 +30,8 @@ export default {
 </script>
 
 <style>
-    #app {
-        font-family: "Avenir", Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        color: #2c3e50;
-    }
+#app {
+  width: 100%;
+  height: 100%;
+}
 </style>
