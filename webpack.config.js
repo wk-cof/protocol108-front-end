@@ -23,6 +23,10 @@ module.exports = {
     loaders: [
       { test: /\.json$/, use: 'json-loader' },
       {
+        test: /\.s[a|c]ss$/,
+        loader: 'style!css!sass'
+      },
+      {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
@@ -31,6 +35,11 @@ module.exports = {
           plugins: ['transform-runtime']
         }
       }
-    ]
+    ],
+    vue: {
+      loaders: {
+        scss: 'style!css!sass'
+      }
+    }
   }
 }

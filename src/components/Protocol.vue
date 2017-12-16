@@ -42,7 +42,7 @@ export default {
                 coundown: 0,
                 display: false
             },
-            sequenceInput:{
+            sequenceInput: {
                 state: false,
                 input: 'Swan Protocol initiated \nEnter Sequence \n >'
             },
@@ -114,7 +114,9 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
+
+
 #sendAmount {
     width: 70px;
 }

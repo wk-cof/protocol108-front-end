@@ -71,85 +71,11 @@
 
 </script>
 
-<style scoped>
-.flip-clock {
+<style lang="scss">
+.minutes {
+  display: none;
 }
-/* $clock-flip-font-size: 120px;
-  $clock-flip-border-radius: 8px;
-  $clock-digit-gap: 20px;
-  $clock-dot-size: 20px;
-
-  $clock-height: ($clock-flip-font-size * 1.2);
-  $clock-flip-width: ($clock-flip-font-size * 0.8);
-  $clock-flip-margin: ($clock-digit-gap / 2);
-  $clock-flip-section-width: (2 * ($clock-flip-width + 2 * $clock-flip-margin));
-
-  $clock-flip-bg: #607D8B;
-  $clock-flip-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
-  $clock-flip-font-color: #F44336;
-  $clock-flip-font-shadow: 0 1px 2px #000;
-
-  .countdown-wrapper{
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .countdown.flip-clock-wrapper ul {
-    height: $clock-height;
-    margin: 0 $clock-flip-margin;
-    width: $clock-flip-width;
-    box-shadow: $clock-flip-shadow;
-  }
-
-  .countdown.flip-clock-wrapper ul li {
-    line-height: $clock-height;
-  }
-
-  .countdown.flip-clock-wrapper ul li a div div.inn {
-    background-color: $clock-flip-bg;
-    color: $clock-flip-font-color;
-    font-size: $clock-flip-font-size;
-    text-shadow: $clock-flip-font-shadow;
-  }
-
-  .countdown.flip-clock-wrapper ul .countdown.flip-clock-wrapper ul li a div div.inn {
-    border-radius: $clock-flip-border-radius;
-  }
-
-  // .countdown.flip-clock-wrapper ul li a div.down
-  //   border-bottom-left-radius: $clock-flip-border-radius
-  //   border-bottom-right-radius: $clock-flip-border-radius
-
-  // .countdown.flip-clock-wrapper ul li a div.up:after
-  //   top: (($clock-height / 2) - 1px)
-
-  // .countdown .flip-clock-dot.top
-  //   top: ($clock-height / 2 - $clock-flip-font-size * 0.2 - $clock-dot-size / 2)
-
-  // .countdown .flip-clock-dot.bottom
-  //   top: ($clock-height / 2 + $clock-flip-font-size * 0.2 - $clock-dot-size / 2)
-
-  // .countdown .flip-clock-dot
-  //   height: $clock-dot-size
-  //   left: $clock-dot-size
-  //   width: $clock-dot-size
-  //   background: $clock-flip-bg
-
-  // .countdown .flip-clock-divider
-  //   height: $clock-height
-  //   width: ($clock-dot-size * 3)
-  //   &:first-child
-  //     width: 0
-
-
-  // .countdown .flip-clock-divider.seconds .flip-clock-label,
-  // .countdown .flip-clock-divider.minutes .flip-clock-label
-  //   right: -1 * $clock-flip-section-width
-
-  // .countdown .flip-clock-divider .flip-clock-label
-  //   color: $clock-flip-font-color
-  //   font-size: $clock-flip-font-size / 4
-  //   width: 2 * $clock-flip-width + 4 * $clock-flip-margin */
+.seconds > .flip-clock-label {
+  display: none;
+}
 </style>
