@@ -15,10 +15,18 @@
         </b-alert>
 
         <flip-clock v-bind:seconds="timer.coundown" v-if="timer.display"></flip-clock>
-        <b-input-group left="wei" class="protocol-input">
-            <b-input id="sendAmount" placeholder="1" v-model="sendAmount" />
+        <b-input-group left="wei" class="protocol-input" style="max-width: 400px">
+            <b-input id="sendAmount" class="bg-dark text-success border-dark" placeholder="1" v-model="sendAmount" />
         </b-input-group>
-        <b-input id="sequenceInput"  class="protocol-input" placeholder="Sequence" v-model="sequenceInput" />
+        <br>
+        <b-form-textarea    id="sequenceInput"
+                            class="protocol-input bg-dark text-success border-dark"
+                            v-model="sequenceInput.input"
+                            :no-resize="true"
+                            :rows="6"
+                            :max-rows="6"
+                            >
+        </b-form-textarea>
         <b-button class="execute-button" type="submit" variant="success" @click="execute">Execute protocol</b-button>
     </div>
 </template>
@@ -34,8 +42,11 @@ export default {
                 coundown: 0,
                 display: false
             },
-            sequenceInput: '',
-            sendAmount: 1,
+            sequenceInput:{
+                state: false,
+                input: 'Swan Protocol initiated \nEnter Sequence \n >'
+            },
+            sendAmount: null,
             toasts: {
                 displayError: false
             },
@@ -57,7 +68,7 @@ export default {
         execute() {
             let numberSequence, weiAmount;
             try {
-                numberSequence = parseInt(this.sequenceInput) || 0;
+                numberSequence = parseInt(this.sequenceInput.input) || 0;
                 weiAmount = parseInt(this.sendAmount) || 1;
             } catch (err) {
                 this.toasts.displayError = true;
@@ -73,6 +84,8 @@ export default {
                             .then(() => {
                                 this.isExecutionSuccessful = true;
                             });
+                    } else {
+                        this.sequenceInput.state = 'invalid';
                     }
                 })
                 .catch(err => {
