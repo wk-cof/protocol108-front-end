@@ -5,7 +5,7 @@
                     dismissible
                     :show="toasts.displayError"
                     @dismissed="toasts.displayError=false">
-        Invalid Sequence
+        {{sequenceInput.errorMessage}}
         </b-alert>
         <b-alert    class="popup-alert"
                     variant="success"
@@ -56,7 +56,8 @@ export default {
                 display: false,
                 staticMessage: '',
                 input: '>: ',
-                waiting: null
+                waiting: null,
+                errorMessage: ''
             },
             sendAmount: null,
             toasts: {
@@ -89,14 +90,13 @@ export default {
                 weiAmount = parseInt(this.sendAmount) || 1;
             } catch (err) {
                 this.toasts.displayError = true;
-                this.errorMessage = 'Input is not an integer';
+                this.sequenceInput.errorMessage = 'Input is not an integer';
                 // this.stopWaiting();
                 return;
             }
 
             ProtocolProvider.validate(numberSequence)
                 .then(_isValid => {
-                    this.toasts.displayError = !_isValid;
                     if (_isValid) {
                         return ProtocolProvider.initialize(weiAmount)
                             .then(() => {
@@ -104,13 +104,14 @@ export default {
                                 this.isExecutionSuccessful = true;
                             });
                     } else {
-                        this.sequenceInput.state = 'invalid';
+                        this.sequenceInput.errorMessage = 'Invalid Sequence!';
+                        this.toasts.displayError = true;
                         this.stopWaiting();
                     }
                 })
                 .catch(err => {
+                    this.sequenceInput.errorMessage = err.toString();
                     console.error('Execution failed. ' + err);
-                    this.errorMessage = err;
                     this.toasts.displayError = true;
                     this.stopWaiting();
                 });
@@ -130,6 +131,9 @@ export default {
             return results && results[1] ? results[1] : input;
         },
         startWaiting(startMessage) {
+            if (!startMessage) {
+                return;
+            }
             if (this.sequenceInput.staticMessage.length > 0) {
                 this.sequenceInput.staticMessage += '\n';
             }
@@ -140,7 +144,9 @@ export default {
         },
         stopWaiting(stopMessage) {
             if (this.sequenceInput.waiting) {
-                this.sequenceInput.staticMessage += '  ' + stopMessage;
+                if (stopMessage) {
+                    this.sequenceInput.staticMessage += '  ' + stopMessage;
+                }
                 clearInterval(this.sequenceInput.waiting);
                 this.sequenceInput.waiting = null;
             }
