@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Protocol from '@/components/Protocol'
-import Details from '@/components/Details'
-import FlipClock from '@/components/FlipClock'
+// import Details from '@/components/Details'
+// import FlipClock from '@/components/FlipClock'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -14,16 +14,16 @@ export default new Router({
       path: '/',
       name: 'Protocol',
       component: Protocol
-    },
-    {
-      path: '/details',
-      name: 'Details',
-      component: Details
-    },
-    {
-      path: '/flip',
-      name: 'FlipClock',
-      component: FlipClock
     }
+    // {
+    //   path: '/details',
+    //   name: 'Details',
+    //   component: Details
+    // },
+    // {
+    //   path: '/flip',
+    //   name: 'FlipClock',
+    //   component: FlipClock
+    // }
   ]
 })

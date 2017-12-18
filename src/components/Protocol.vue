@@ -5,7 +5,7 @@
                     dismissible
                     :show="toasts.displayError"
                     @dismissed="toasts.displayError=false">
-        Invalid Sequence
+        {{sequenceInput.errorMessage}}
         </b-alert>
         <b-alert    class="popup-alert"
                     variant="success"
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import ProtocolProvider from '../services/protocol-provider';
+import ProtocolPromise from '../services/protocol-provider';
 import FlipClock from './FlipClock';
 
 export default {
@@ -56,7 +56,8 @@ export default {
                 display: false,
                 staticMessage: '',
                 input: '>: ',
-                waiting: null
+                waiting: null,
+                errorMessage: ''
             },
             sendAmount: null,
             toasts: {
@@ -69,7 +70,7 @@ export default {
     methods: {
         countdown() {
             this.startWaiting('Loading SWAN protocol...');
-            return ProtocolProvider.countdown()
+            return ProtocolPromise.then(methods => methods.countdown())
                 .then(result => {
                     this.stopWaiting('Success');
                     this.timer.display = true;
@@ -89,34 +90,33 @@ export default {
                 weiAmount = parseInt(this.sendAmount) || 1;
             } catch (err) {
                 this.toasts.displayError = true;
-                this.errorMessage = 'Input is not an integer';
-                // this.stopWaiting();
+                this.sequenceInput.errorMessage = 'Input is not an integer';
                 return;
             }
 
-            ProtocolProvider.validate(numberSequence)
+            ProtocolPromise.then(methods => methods.validate(numberSequence))
                 .then(_isValid => {
-                    this.toasts.displayError = !_isValid;
                     if (_isValid) {
-                        return ProtocolProvider.initialize(weiAmount)
+                        return ProtocolPromise.then(methods => methods.initialize(weiAmount))
                             .then(() => {
                                 this.stopWaiting();
                                 this.isExecutionSuccessful = true;
                             });
                     } else {
-                        this.sequenceInput.state = 'invalid';
+                        this.sequenceInput.errorMessage = 'Invalid Sequence!';
+                        this.toasts.displayError = true;
                         this.stopWaiting();
                     }
                 })
                 .catch(err => {
+                    this.sequenceInput.errorMessage = err.toString();
                     console.error('Execution failed. ' + err);
-                    this.errorMessage = err;
                     this.toasts.displayError = true;
                     this.stopWaiting();
                 });
         },
         protocolState() {
-            ProtocolProvider.protocolState()
+            ProtocolPromise.then(methods => methods.protocolState())
                 .then(result => {
                     console.log(result);
                 })
@@ -130,6 +130,9 @@ export default {
             return results && results[1] ? results[1] : input;
         },
         startWaiting(startMessage) {
+            if (!startMessage) {
+                return;
+            }
             if (this.sequenceInput.staticMessage.length > 0) {
                 this.sequenceInput.staticMessage += '\n';
             }
@@ -140,33 +143,35 @@ export default {
         },
         stopWaiting(stopMessage) {
             if (this.sequenceInput.waiting) {
-                this.sequenceInput.staticMessage += '  ' + stopMessage;
+                if (stopMessage) {
+                    this.sequenceInput.staticMessage += '  ' + stopMessage;
+                }
                 clearInterval(this.sequenceInput.waiting);
                 this.sequenceInput.waiting = null;
             }
         },
         getStatistics() {
             this.startWaiting('Loading protocol state...');
-            return ProtocolProvider.protocolState()
+            return ProtocolPromise.then(methods => methods.protocolState())
                 .then(protocolState => {
                     this.stopWaiting(protocolState);
                     this.startWaiting('Loading protocol balance...');
-                    return ProtocolProvider.getBalance();
+                    return ProtocolPromise.then(methods => methods.getBalance());
                 })
                 .then(result => {
                     this.stopWaiting(result);
                     this.startWaiting('Loading cycle number...');
-                    return ProtocolProvider.cycle();
+                    return ProtocolPromise.then(methods => methods.cycle());
                 })
                 .then(result => {
                     this.stopWaiting(result);
                     this.startWaiting('Loading last executor ID...');
-                    return ProtocolProvider.executor();
+                    return ProtocolPromise.then(methods => methods.executor());
                 })
                 .then(result => {
                     this.stopWaiting(result);
                     this.startWaiting('Loading volume...');
-                    return ProtocolProvider.volume();
+                    return ProtocolPromise.then(methods => methods.volume());
                 })
                 .then(result => {
                     this.stopWaiting(result);
@@ -175,7 +180,7 @@ export default {
                     this.sequenceInput.display = true;
                 })
                 .catch(failure => {
-                    this.stopWaiting('Error: ' + JSON.stringify(failure));
+                    this.stopWaiting('Error: ' + failure.toString());
                 });
         }
     },
