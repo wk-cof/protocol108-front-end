@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import ProtocolProvider from '../services/protocol-provider';
+import ProtocolPromise from '../services/protocol-provider';
 import FlipClock from './FlipClock';
 
 export default {
@@ -70,7 +70,7 @@ export default {
     methods: {
         countdown() {
             this.startWaiting('Loading SWAN protocol...');
-            return ProtocolProvider.countdown()
+            return ProtocolPromise.then(methods => methods.countdown())
                 .then(result => {
                     this.stopWaiting('Success');
                     this.timer.display = true;
@@ -91,14 +91,13 @@ export default {
             } catch (err) {
                 this.toasts.displayError = true;
                 this.sequenceInput.errorMessage = 'Input is not an integer';
-                // this.stopWaiting();
                 return;
             }
 
-            ProtocolProvider.validate(numberSequence)
+            ProtocolPromise.then(methods => methods.validate(numberSequence))
                 .then(_isValid => {
                     if (_isValid) {
-                        return ProtocolProvider.initialize(weiAmount)
+                        return ProtocolPromise.then(methods => methods.initialize(weiAmount))
                             .then(() => {
                                 this.stopWaiting();
                                 this.isExecutionSuccessful = true;
@@ -117,7 +116,7 @@ export default {
                 });
         },
         protocolState() {
-            ProtocolProvider.protocolState()
+            ProtocolPromise.then(methods => methods.protocolState())
                 .then(result => {
                     console.log(result);
                 })
@@ -153,26 +152,26 @@ export default {
         },
         getStatistics() {
             this.startWaiting('Loading protocol state...');
-            return ProtocolProvider.protocolState()
+            return ProtocolPromise.then(methods => methods.protocolState())
                 .then(protocolState => {
                     this.stopWaiting(protocolState);
                     this.startWaiting('Loading protocol balance...');
-                    return ProtocolProvider.getBalance();
+                    return ProtocolPromise.then(methods => methods.getBalance());
                 })
                 .then(result => {
                     this.stopWaiting(result);
                     this.startWaiting('Loading cycle number...');
-                    return ProtocolProvider.cycle();
+                    return ProtocolPromise.then(methods => methods.cycle());
                 })
                 .then(result => {
                     this.stopWaiting(result);
                     this.startWaiting('Loading last executor ID...');
-                    return ProtocolProvider.executor();
+                    return ProtocolPromise.then(methods => methods.executor());
                 })
                 .then(result => {
                     this.stopWaiting(result);
                     this.startWaiting('Loading volume...');
-                    return ProtocolProvider.volume();
+                    return ProtocolPromise.then(methods => methods.volume());
                 })
                 .then(result => {
                     this.stopWaiting(result);
@@ -181,7 +180,7 @@ export default {
                     this.sequenceInput.display = true;
                 })
                 .catch(failure => {
-                    this.stopWaiting('Error: ' + JSON.stringify(failure));
+                    this.stopWaiting('Error: ' + failure.toString());
                 });
         }
     },
